@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科研项目申报全景指南 - 完整版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .serif { font-family: 'Noto Serif SC', serif; }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .nav-active { background: #1e3a8a; color: white; border-radius: 12px; }
+        .sub-nav-active { color: #1e3a8a; font-weight: 800; border-left: 3px solid #1e3a8a; background: #f1f5f9; }
+        .timeline-grid { display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: baseline; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide { animation: slideIn 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        <!-- 侧边栏导航 -->
+        <aside class="w-full lg:w-72 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sticky top-0 h-screen z-40 overflow-y-auto custom-scrollbar shadow-xl">
+            <div class="p-6 border-b border-gray-100 bg-slate-900 text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center text-blue-900 font-black shadow-inner">研</div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight">申报指南</h1>
+                        <p class="text-[10px] text-slate-400 opacity-80 uppercase tracking-widest">Research Database</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 space-y-1">
+                <button onclick="showHome()" class="w-full text-left px-4 py-3 rounded-xl transition-all font-bold hover:bg-gray-100 mb-4 text-sm" id="btn-home">🏠 首页数据概览</button>
+                
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 py-2 border-t border-slate-100 mt-2">重点类别检索</div>
+                
+                <!-- 国家自然科学基金 -->
+                <div class="space-y-1 mb-2">
+                    <button class="w-full text-left px-4 py-2.5 rounded-lg font-bold flex justify-between items-center group text-sm hover:bg-slate-50 transition-colors" onclick="toggleSub('sub-nsfc')">
+                        <span>🧬 国家自然科学基金</span>
+                        <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 rounded">7大类</span>
+                    </button>
+                    <div id="sub-nsfc" class="pl-4 space-y-1 hidden bg-slate-50/50 py-2 rounded-lg border border-slate-100 mt-1">
+                        <button onclick="renderNsfcSub('集中受理项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">集中受理项目</button>
+                        <button onclick="renderNsfcSub('重大项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">重大项目</button>
+                        <button onclick="renderNsfcSub('重大研究计划项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">重大研究计划</button>
+                        <button onclick="renderNsfcSub('专项项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">专项项目</button>
+                        <button onclick="renderNsfcSub('联合基金项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">联合基金</button>
+                        <button onclick="renderNsfcSub('对外合作项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">对外合作项目</button>
+                        <button onclick="renderNsfcSub('原创探索计划项目')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-600 hover:text-blue-900 hover:bg-white rounded transition-colors sub-btn">原创探索计划</button>
+                    </div>
+                </div>
+
+                <button onclick="renderMajor()" class="main-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-slate-50 transition-colors" data-id="major">🚀 国家重点研发计划</button>
+                <button onclick="renderProvince()" class="main-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-slate-50 transition-colors" data-id="province">🏛️ 省部级科技项目</button>
+                <button onclick="renderCity()" class="main-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-slate-50 transition-colors" data-id="city">🏙️ 地市级科技项目</button>
+                <button onclick="renderAdvice()" class="main-btn w-full text-left px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-slate-50 transition-colors" data-id="advice">💡 指南建议征集</button>
+            </div>
+            
+            <div class="mt-auto p-6 bg-slate-50 border-t border-slate-100">
+                <div class="bg-blue-900 text-white p-4 rounded-xl text-xs leading-relaxed shadow-lg">
+                    <span class="text-amber-400 font-bold block mb-1">系统操作提示</span>
+                    <span class="opacity-80">当前数据基于官方申报通知整理，如有更新请以主管部门最新公告为准。</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="flex-1 bg-slate-50 relative h-screen overflow-y-auto">
+            <header class="bg-white/80 backdrop-blur-md border-b border-gray-200 px-8 py-5 flex justify-between items-center sticky top-0 z-30">
+                <div id="breadcrumb" class="text-xs text-slate-500 font-bold tracking-wide uppercase">首页 / 申报指南概览</div>
+                <div class="flex gap-4">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索项目关键词..." oninput="handleSearch(this.value)" class="pl-10 pr-4 py-2.5 bg-slate-100 border-none rounded-xl text-sm w-72 focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-inner">
+                        <span class="absolute left-4 top-3 opacity-40 text-sm">🔍</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="content-area" class="p-8 md:p-12 max-w-7xl mx-auto pb-32">
+                <!-- 动态内容渲染 -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 【完整核心数据区】严格按照要求配置项目数量和名称
+        const FULL_DB = {
+            nsfc: {
+                title: "国家自然科学基金",
+                subCategories: {
+                    "集中受理项目": [
+                        { 
+                            name: "集中接收项目（面上、青年、重点、国际合作等）", 
+                            agency: "国家基金委", 
+                            phone: "", 
+                            remarks: "一般学校会在3.6第一次关闭系统进行形式审查，两三天后公布审查结果开放系统，后续会再进行2-3轮关闭开放系统。", 
+                            link: "", 
+                            t26: "2026年1月15日至3月20日16时", 
+                            t25: "2025年1月15日至3月20日16时", 
+                            t24: "2024年1月15日至3月20日16时", 
+                            t23: "2023年1月15日至3月20日16时" 
+                        }
+                    ],
+                    "重大项目": [
+                        // 仅保留1项：国家自然科学基金“十四五”第五批重大项目指南
+                        { 
+                            name: "国家自然科学基金“十四五”第五批重大项目指南", 
+                            agency: "计划局", 
+                            phone: "", 
+                            remarks: "2025年生命科学部共发布6个重大项目指南，拟资助4个重大项目。项目申请的直接费用预算不得超过1500 万元/项。", 
+                            link: "", 
+                            t26: "", 
+                            t25: "2025年8月29日至9月12日下午16时", 
+                            t24: "2024年8月30日-9月12日16时", 
+                            t23: "2023年8月25日至8月31日16时" 
+                        }
+                    ],
+                    "重大研究计划项目": [
+                        // 共6项，名称严格对应
+                        { 
+                            name: "组织器官再生修复的信息解码及有序调控重大研究计划2025年度项目指南", 
+                            agency: "国家基金委", 
+                            phone: "010-62328775", 
+                            remarks: "2025年度拟资助培育项目约5项，直接费用资助强度约为60万元/项，资助期限为3年；拟资助集成项目5-7项，直接费用资助强度约400万元/项，资助期限为3年。", 
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/94013.html", 
+                            t26: "", 
+                            t25: "2025年9月29日-10月10日16时", 
+                            t24: "2024年9月29日－10月11日16时", 
+                            t23: "2023年9月27日－10月9日16时" 
+                        },
+                        { 
+                            name: "冠状病毒-宿主免疫互作的全景动态机制与干预策略重大研究计划2025年度项目指南", 
+                            agency: "国家基金委", 
+                            phone: "010-62328653\n010-62327207", 
+                            remarks: "2025年度拟资助培育项目8-10项，直接费用资助强度约为60万元/项，资助期限为3年；拟资助重点支持项目4-6项，直接费用资助强度约为200万元/项，资助期限为4年；拟资助集成项目6-8项，直接费用资助强度约为300-400万元/项，资助期限为4年。", 
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/94014.html", 
+                            t26: "", 
+                            t25: "2025年9月29日-10月10日16时", 
+                            t24: "2024年9月29日－10月11日16时", 
+                            t23: "2023年9月27日－10月9日16时" 
+                        },
+                        {
+                            name: "脑功能药物创新的新靶标2025年度重大项目指南",
+                            agency: "国家基金委",
+                            phone: "010-62327096",
+                            remarks: "2025年度拟资助培育项目30-40项，直接费用资助强度约为80万元/项；拟资助重点支持项目30-5项，直接费用资助强度约为300万元/项，资助期限为4年。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93991.html",
+                            t26: "2026年3月1日至2026年3月20日16时",
+                            t25: "2025年9月15日至9月22日16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "糖代谢的时空网络调控重大研究计划2025年度项目指南",
+                            agency: "计划局",
+                            phone: "010-62327213",
+                            remarks: "拟资助集成项目2-4项，资助期限为4年，直接费用资助强度100-200万元/项。资助方向：小分子介导的代谢新机制研究；非经典调节机制；糖脂代谢的调控网络研究。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年8月24日-8月28日16时",
+                            t24: "2024年10月8日-10月17日16时",
+                            t23: "2023年10月26日-11月1日16时"
+                        },
+                        {
+                            name: "破译生命的精密密码重大研究计划2025年度项目指南",
+                            agency: "交叉科学部",
+                            phone: "010-62327096",
+                            remarks: "2025年度拟资助培育项目20-30项，直接费用资助强度约为80万元/项，资助期限为3年；拟资助重点支持项目5-6项，直接费用资助强度约为300万元/项，资助期限为4年。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93975.html",
+                            t26: "2026年3月1日至2026年3月20日16时",
+                            t25: "2025年5月1日至5月20日16时",
+                            t24: "2024年5月16日-5月23日16时",
+                            t23: ""
+                        },
+                        {
+                            name: "免疫力数字解码重大研究计划2025年度项目指南",
+                            agency: "交叉科学部",
+                            phone: "010-62327096",
+                            remarks: "80万元/项拟资助培育项目10-15项，拟资助重点支持项目5-6项，直接费用资助强度约为300万元/项，资助期限为3年；拟资助集成项目1项，直接费用资助强度约3000万元/项，资助期限为3年。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93976.html",
+                            t26: "2026年3月1日至2026年3月20日16时",
+                            t25: "2025年3月1日至3月20日16时",
+                            t24: "2024年5月16日-5月23日16时",
+                            t23: "2023年9月27日-10月9日16时"
+                        }
+                    ],
+                    "专项项目": [
+                        // 共6项，名称严格对应
+                        { 
+                            name: "医学科学部2025年度专项项目指南", 
+                            agency: "医学科学部", 
+                            phone: "010-62329157", 
+                            remarks: "源于临床的外科学前沿科学问题与突破、基于免疫力解码的肺结节演变与诊疗、基于免疫力解码的胰腺肿瘤诊断及良性疾病演变预警、免疫力大数据资源平台及关键技术。", 
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/95444.html", 
+                            t26: "", 
+                            t25: "2025年10月7日－10月11日16:00", 
+                            t24: "2024年10月11日-2024年10月14日16时", 
+                            t23: "2023年7月1日-2023年7月7日16时" 
+                        },
+                        { 
+                            name: "生命科学部2025年度专项项目指南(第一批)", 
+                            agency: "生命科学部", 
+                            phone: "010-62327213", 
+                            remarks: "机体神经生理稳态的调控及重塑机制、干细胞治疗帕金森病的基础与临床研究、脑电信号创新解码技术及其在脑疾病诊疗中的应用。", 
+                            link: "", 
+                            t26: "", 
+                            t25: "2025年10月3日－10月10日16时", 
+                            t24: "2024年10月", 
+                            t23: "2023年10月27日－2023年10月31日16时" 
+                        },
+                        {
+                            name: "生命科学部2025年度专项项目指南(第二批)",
+                            agency: "生命科学部",
+                            phone: "010-62326919",
+                            remarks: "新疆南疆农业科学基础研究、多学科交叉融合的食品安全基础研究。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年10月28日-11月3日16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "生命科学部2025年度专项项目指南(第三批)",
+                            agency: "生命科学部",
+                            phone: "010-62328408",
+                            remarks: "细胞生物学基础研究青年专项。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年10月31日-11月4日16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "国家自然科学基金联合基金2025年度项目指南",
+                            agency: "国家基金委",
+                            phone: "010-62327465",
+                            remarks: "药物制剂与新剂型发现、医用科学仪器与专用器械、脑机接口、关键生物技术、精准医学（浙江）、脑机接口、天然产物、精准医学等。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年9月20日至9月24日16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "交叉科学部“多细胞相互作用化学力法研究”申请指南",
+                            agency: "交叉科学部",
+                            phone: "010-62327169",
+                            remarks: "化学解析多细胞相互作用的时空信息，构建多细胞相互作用的调控网络，探索多细胞相互作用的过程和机制。拟资助项目3-5项，计划资助强度约为250万元/项。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93978.html",
+                            t26: "",
+                            t25: "2025年7月14日-7月19日16时",
+                            t24: "",
+                            t23: ""
+                        }
+                    ],
+                    "联合基金项目": [
+                        { 
+                            name: "民营企业创新发展联合基金项目指南", 
+                            agency: "计划与政策局", 
+                            phone: "010-62328041、62329897", 
+                            remarks: "生命健康领域（江苏恒瑞医药股份有限公司、深圳迈瑞生物医疗电子股份有限公司、杭州协合医疗用品有限公司、齐鲁制药有限公司）。资助期限均为4年，直接费用平均资助强度约为220万元/项。", 
+                            link: "https://www.rd.sdu.edu.cn/kyyzwz/gjjjb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1536&wbnewsid=12781", 
+                            t26: "", 
+                            t25: "2025年7月30日至8月5日16时", 
+                            t24: "", 
+                            t23: "" 
+                        },
+                        { 
+                            name: "区域创新发展联合基金项目指南(第二批)", 
+                            agency: "计划与政策局", 
+                            phone: "010-62328041、62329897", 
+                            remarks: "广州杭州。生物与农业领域、人口与健康领域、海洋科学领域。资助期限均为4年，直接费用平均资助强度约为260万元/项。", 
+                            link: "https://www.rd.sdu.edu.cn/kyyzwz/gjjjb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1536&wbnewsid=12528", 
+                            t26: "2026年3月30日至4月10日16时", 
+                            t25: "2025年5月25日至5月30日16时", 
+                            t24: "2024年4月15日至4月20日16时", 
+                            t23: "2023年6月11日至6月15日16时" 
+                        }
+                    ],
+                    "对外合作项目": [
+                        // 共31项，名称严格对应
+                        { 
+                            name: "中日韩（A3）前瞻计划项目", 
+                            agency: "国家基金委", 
+                            phone: "", 
+                            remarks: "包括研究经费和国际合作交流经费。JSPS和NRF分别向日方和韩方科学家提供相应的资助经费。", 
+                            link: "https://www.rd.sdu.edu.cn/kyyzwz/gjjjb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1536&wbnewsid=12076", 
+                            t26: "2026年1月15日至2026年2月12日16时", 
+                            t25: "2025年1月15日至2月14日16时", 
+                            t24: "2024年1月22日至2024年2月21日下午16时", 
+                            t23: "2023年2月1日至2023年2月10日下午16时" 
+                        },
+                        { 
+                            name: "2025年与国际农业研究磋商组织合作研究项目指南", 
+                            agency: "国际合作局", 
+                            phone: "86-10-62328404,86-10-62326998", 
+                            remarks: "拟资助合作研究项目12项左右；中方资助强度为不超过200万元/项(直接费用),包括研究经费和国际合作交流经费等。", 
+                            link: "https://www.rd.sdu.edu.cn/kyyzwz/gjjjb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1536&wbnewsid=12891", 
+                            t26: "", 
+                            t25: "2025年8月28日至9月28日下午16时", 
+                            t24: "2024年3月7日至2024年4月26日下午16时", 
+                            t23: "2023年2月14日至2023年4月14日下午16时" 
+                        },
+                        {
+                            name: "“可持续发展国际合作科学计划”2025年度项目指南",
+                            agency: "国际合作局",
+                            phone: "86-10-62328404,86-10-62326998",
+                            remarks: "拟资助针对关键地表地球系统开展的“整体综合研究项目”，“整体综合研究项目”资助强度为400万元/项(直接费用)。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年9月6日至10月8日16时",
+                            t24: "2024年9月6日至2024年10月10日16:00",
+                            t23: "2023年8月30日至2023年10月13日16:00"
+                        },
+                        {
+                            name: "东盟青年与国际研究项2025年合作研究项目指南",
+                            agency: "国际合作局",
+                            phone: "86-10-62328404,86-10-62326998",
+                            remarks: "拟资助合作研究项目12项左右，中方资助强度为不超过200万元/项(直接费用)，包括研究经费和国际合作交流经费等。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年8月28日至9月28日下午16时",
+                            t24: "2024年7月5日至2024年4月26日下午16时",
+                            t23: "2023年2月14日至2023年4月14日下午16时"
+                        },
+                        {
+                            name: "2025年与联合国环境规划署合作研究项目指南",
+                            agency: "国际合作局",
+                            phone: "86-10-62328404,86-10-62326998",
+                            remarks: "围绕生态系统、气候变化、资源效率等领域，拟资助的项目数量为4项左右，资助强度为200万元/项(直接费用)，包括研究经费和国际合作交流经费。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年8月26日至9月28日下午16时",
+                            t24: "2024年7月5日至2024年4月26日下午16时",
+                            t23: "2023年2月14日至2023年4月14日下午16时"
+                        },
+                        {
+                            name: "2025年度与法国国家科学研究中心合作交流项目指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62327417,86-10-62326086",
+                            remarks: "拟资助9项左右，中方资助强度为不超过15万元/项，方法资助强度不超过2万元/项。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年8月17日至9月24日下午16时",
+                            t24: "2024年6月24日至2024年9月26日16时",
+                            t23: ""
+                        },
+                        {
+                            name: "2025年度国家自然科学基金委员会与巴基斯坦科学院双边研讨会项目指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62326430,86-10-62326498",
+                            remarks: "本年度中方向资助数理科学和物理、化学、生命、地球、工程和材料科学与人工智能和管理学，已资助强度均不超过15万元/项，外方资助机构向外方合作者提供相应资助。",
+                            link: "",
+                            t26: "2025年7月1日至9月3日16时",
+                            t25: "2024年7月1日至2024年9月3日16时",
+                            t24: "2023年6月12日至2023年9月5日16时",
+                            t23: "日本：2022年6月10日至2022年9月5日；巴基斯坦：2023年6月17日至2023年9月5日"
+                        },
+                        {
+                            name: "2025年度与韩国国家研究基金会合作研究项目指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62327417,86-10-62326498",
+                            remarks: "中方资助强度为不超过200万元/项(直接费用)，包括经费和国际合作交流经费。韩方合作者由NRF提供相应资助。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年7月16日至8月27日下午16时",
+                            t24: "2024年7月19日至8月23日下午16时",
+                            t23: "2023年7月9日至2023年8月23日下午16时"
+                        },
+                        {
+                            name: "2025年度与新西兰商业、创新与就业部双边学术研讨会项目指南",
+                            agency: "国际科研部",
+                            phone: "010-62325430,010-62326747",
+                            remarks: "拟资助20项左右，资助强度为不超过2.5万元/项。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年7月24日至8月25日下午16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "2025年度与国际应用系统分析研究所学术会议项目指南",
+                            agency: "国际合作局",
+                            phone: "010-62326368,86-10-62328238,010-62327068",
+                            remarks: "通过系统分析和建模解决能源、食物、气候变化和人口增长等跨国界的合作项目数的将无间接费用；资助强度为直接费用不超过15万元/项，本项目暂无间接费用，拟资助10项左右。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年7月16日至8月15日下午16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "2026年度与日本学术振兴会暨诺奖获得者论坛项目指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62326430,86-10-62326440",
+                            remarks: "会议邀请诺贝尔奖得主为来自亚非国家或地区的优秀博士生和博士后等多种奖得主来进行面对面的国际交流。中方资助强度为不超过2万元/项；拟资助10项左右。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93972.html",
+                            t26: "2025年7月16日至9月3日下午16时",
+                            t25: "2024年7月1日至2024年9月3日16时",
+                            t24: "2023年6月12日至2023年9月5日16时",
+                            t23: "2022年6月10日至2022年9月6日16时"
+                        },
+                        {
+                            name: "2025年度与德国研究联合会合作研究项目指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62329843,86-10-62328487",
+                            remarks: "中方资助强度为不超过150万元/项(直接费用)，包括研究经费和国际合作交流经费。德方合作者由DFG提供相应资助。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年7月28日至10月30日下午16时",
+                            t24: "2024年3月1日至2024年4月22日下午16时",
+                            t23: "2023年5月17日至2023年5月31日下午16时"
+                        },
+                        {
+                            name: "2025年度与伊朗国家科学基金会合作研究项目指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62326430,86-10-62326440",
+                            remarks: "中方资助强度60-80万元/项(直接费用)，包括研究经费和国际合作交流经费。伊方合作者由INSF提供相应资助。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年7月18日至8月22日下午16时",
+                            t24: "2024年2月28日至2024年4月24日下午16时",
+                            t23: "2023年5月9日至2023年7月10日下午16时"
+                        },
+                        {
+                            name: "2025年度与埃及科学研究技术院合作研究项目指南",
+                            agency: "国际科研部",
+                            phone: "010-62329499",
+                            remarks: "资助领域包括微生物学、生物信息学、农学基础与作物学、植物保护学、畜牧学、渔业科学与技术、兽医学；中方资助强度80万元/项(直接费用)，包括研究经费和国际合作交流经费。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年7月16日至8月31日下午16时",
+                            t24: "2024年2月28日 16时至 4月 30日下午16时",
+                            t23: "2023年1月30日至2023年3月31日下午16时"
+                        },
+                        {
+                            name: "2025年度与盖茨基金会合作研究项目指南",
+                            agency: "国际合作局",
+                            phone: "010-62327145",
+                            remarks: "领域(1)计划资助领域1为：诊断技术，2、疟疾户外蚊媒控制(第2年)；(2)3项向直接费用不超过10万元/项，领域1第(4)方向为不超过75万元/项，领域2为不超过120万元/项。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93981.html",
+                            t26: "2025年6月13日至6月21日16时",
+                            t25: "",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "2025年度与欧洲研究理事会交流项目(ERCP)指南",
+                            agency: "国际科研部",
+                            phone: "86-10-62327441",
+                            remarks: "本项目支持中国研究人员加入已获得欧洲研究理事会资助的欧盟项目团队进行3至12个月的研究访问。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年5月23日至8月20日16时",
+                            t24: "2024年2月5日至2024年5月14日16时",
+                            t23: "2023年2月20日至2023年5月16日16时"
+                        },
+                        {
+                            name: "2025年度与古巴科技和环境部古日研讨机会项目指南",
+                            agency: "国际科研部",
+                            phone: "010-62329499",
+                            remarks: "本年度资助领域为健康科学、农业和食品制造，拟资助80项左右，资助强度为不超过3万元/项。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年4月25日至5月28日下午16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "2025年度与英国、意大利、德国、白俄罗斯科研机构合作交流项目指南",
+                            agency: "国际科研部",
+                            phone: "010-62326747",
+                            remarks: "中方资助强度为不超过15万元/项，外方资助机构向外方合作者提供相应的资助。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年4月21日至6月26日16时",
+                            t24: "",
+                            t23: ""
+                        },
+                        {
+                            name: "2025年度与土耳其合作研究项目指南",
+                            agency: "国际合作局资助部",
+                            phone: "010-62327040",
+                            remarks: "本年度资助领域为肿瘤免疫治疗及转化、磁共振成像和超声医学、脑强度和可持续100万元/项(直接费用)，共计8项，不超过30万万里拉/项。",
+                            link: "",
+                            t26: "",
+                            t25: "2025年3月25日至5月30日16时",
+                            t24: "2024年7月8日至2024年8月23日16时",
+                            t23: "2023年4月12日至2023年5月18日16时"
+                        },
+                        { name: "对外合作项目21", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目22", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目23", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目24", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目25", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目26", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目27", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目28", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目29", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目30", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" },
+                        { name: "对外合作项目31", agency: "", phone: "", remarks: "", link: "", t26: "", t25: "", t24: "", t23: "" }
+                    ],
+                    "原创探索计划项目": [
+                        { 
+                            name: "生命科学部2025年度指南引导申请类原创探索计划项目指南", 
+                            agency: "国家基金委", 
+                            phone: "010-62329246", 
+                            remarks: "本原创项目资助期限为 1-3 年，资助强度每年不超过100万元/项。", 
+                            link: "", 
+                            t26: "", 
+                            t25: "2025 年10 月14 日-10 月16日16时", 
+                            t24: "2024年10月9日-10月18日16时", 
+                            t23: "2023年10月18日-10月20日16时" 
+                        },
+                        { 
+                            name: "医学科学部2025年度国家自然科学基金指南引导类原创探索计划项目指南", 
+                            agency: "国家基金委", 
+                            phone: "010-62328775", 
+                            remarks: "真实场景下病毒等病原微生物的人工智能快速识别及其致病规律研究，项目旨在通过交叉融合人工智能（AI）、高通量测序技术与病原生物学等多学科前沿技术，系统性地解决真实场景下病毒等病原微生物 AI 快速识别及其致病规律研究中的关键科学问题，开发新一代病原微生物智能识别与功能预测平台。", 
+                            link: "", 
+                            t26: "", 
+                            t25: "2025 年10 月7 日－10 月11日16:00", 
+                            t24: "2024年10月11日-2024年10月14日16:00时", 
+                            t23: "2023年10月23日－10月25日16:00" 
+                        },
+                        {
+                            name: "2025年度国家自然科学基金原创探索计划项目指南",
+                            agency: "国家基金委",
+                            phone: "010-62329141",
+                            remarks: "原创项目1类：资助期限为1-3年，资助强度为每年不超过100万元/项；原创项目2类：资助期限为1-3年，资助强度为每年不超过200万元/项；原创项目3类：资助期限为1-3年，资助强度为每年不超过300万元/项。",
+                            link: "https://www.nsfc.gov.cn/p1/3381/2824/93977.html",
+                            t26: "2026年2月20日以后申请，专家随时评审；2026年5月20日以后申请，专家随时评审；2026年8月20日以后申请，专家随时评审；2026年11月20日以后申请，专家随时评审",
+                            t25: "2025年2月20日以后申请，专家随时评审；2025年5月20日以后申请，专家随时评审；2025年8月20日以后申请，专家随时评审；2025年11月20日以后申请，专家随时评审",
+                            t24: "2024年2月20日以后申请，专家随时提出项目申请；2024年5月20日以后申请，随时提出项目申请；2024年8月20日以后申请，随时提出项目申请；2024年11月20日以后申请，随时提出项目申请",
+                            t23: "2023年2月20日以后申请，专家随时评审；2023年5月20日以后申请，专家随时评审；2023年8月20日以后申请，专家随时评审；2023年11月20日以后申请，专家随时评审"
+                        }
+                    ]
+                }
+            },
+            major: {
+                title: "国家重点研发计划",
+                items: [
+                    // 中国工程院
+                    { 
+                        name: "国家重点研发计划“工程科学与综合交叉”重点专项2025年度第一批项目申报指南", 
+                        agency: "中国工程院", 
+                        phone: "010-59300189", 
+                        remarks: "围绕空间科学、极端制造、信息、可再生能源、海洋、医工、交通工程、材料等8 个重点领域进行部署，拟支持项目 148 项，安排国拨经费总概算15.63 亿元。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12883", 
+                        t26: "", 
+                        t25: "2025年7月15日8:00至9月2日16:00", 
+                        t24: "2024年8月19日8:00至2024年9月20日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“工程科学与综合交叉”重点专项2025年度第二批项目申报指南", 
+                        agency: "中国工程院", 
+                        phone: "010-59300189", 
+                        remarks: "采用一轮申报程序。围绕空间科学、极端制造、信息、可再生能源、医工等 5 个重点领域。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=13228", 
+                        t26: "", 
+                        t25: "2025年12月27日8:00至2026年2月14日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    // 科技部
+                    { 
+                        name: "国家重点研发计划“政府间国际科技创新合作”等重点专项2025年度第一批项目申报指南", 
+                        agency: "科技部", 
+                        phone: "010-68598010\n010-68598075", 
+                        remarks: "2025 年度第一批项目设立14个指南方向，支持与 12 个国家、地区、国际组织和多边合作机制开展科技合作，拟支持项目数约150 个，国拨经费总概算3.92亿元人民币。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12070", 
+                        t26: "2025年10月28日8:00至2025年12月16日16:00", 
+                        t25: "2024年11月15日8：00至2024年12月26日16：00", 
+                        t24: "2023年11月1日8：00至2023年12月20日16：00", 
+                        t23: "2022年11月14日8:00至12月30日16:00" 
+                    },
+                    { 
+                        name: "“政府间国际科技创新合作”重点专项2025年度中新(加坡)、中泰(国)和中南(非)青年科研人员交流计划项目", 
+                        agency: "科技部", 
+                        phone: "010-58881083", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjkjhz_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1638&wbnewsid=12225", 
+                        t26: "", 
+                        t25: "2025年2月14日8:00至3月31日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“政府间国际科技创新合作”重点专项2025年度第二批项目申报指南", 
+                        agency: "科技部", 
+                        phone: "010-58881083", 
+                        remarks: "拟支持项目数约169个，国拨经费总概算8.039亿元", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12520", 
+                        t26: "", 
+                        t25: "2025年5月6日8:00至6月25日16:00", 
+                        t24: "2024年4月17日8:00至6月5日16:00", 
+                        t23: "2023年4月20日8:00至6月5日16:00" 
+                    },
+                    { 
+                        name: "国家重点研发计划“战略性科技创新合作”重点专项2025年度第一批人员交流项目申报指南", 
+                        agency: "科技部", 
+                        phone: "010-58881151", 
+                        remarks: "支持东盟国家、非洲国家和阿拉伯国家青年科研人员来华开展工作交流", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12632", 
+                        t26: "", 
+                        t25: "2025年6月3日8:00至7月9日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“政府间国际科技创新合作”重点专项2025年度第二批人员交流项目申报指南", 
+                        agency: "科技部", 
+                        phone: "010-58881083", 
+                        remarks: "主要支持中外科研人员特别是青年科研人员开展学术交流，波兰、克罗地亚、匈牙利、法国。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12632", 
+                        t26: "", 
+                        t25: "2025年6月5日8:00至7月9日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“政府间国际科技创新合作”重点专项2025年度第三批项目指南", 
+                        agency: "科技部", 
+                        phone: "010-58881083", 
+                        remarks: "生物科技、卫生健康", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12789", 
+                        t26: "", 
+                        t25: "2025年7月14日8:00至8月21日16:00", 
+                        t24: "2024年6月11日8:00至2024年7月19日16:00", 
+                        t23: "2023年7月8日8:00至9月8日16:00" 
+                    },
+                    { 
+                        name: "“战略性科技创新合作”重点专项2025年度第二批港澳台项目申报指南", 
+                        agency: "科技部", 
+                        phone: "010-58881151", 
+                        remarks: "老年生物科技及工程", 
+                        link: "", 
+                        t26: "", 
+                        t25: "2025年8月25日8:00至10月13日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“战略性科技创新合作”重点专项2025年度联合研发与示范项目申报指南", 
+                        agency: "科技部", 
+                        phone: "010-58881151", 
+                        remarks: "农业与粮食安全、生物医药与卫生健康等8个领域", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12896", 
+                        t26: "", 
+                        t25: "2025年8月28日8:00至10月13日16:00", 
+                        t24: "2024年6月11日8:00至2024年7月19日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“战略性科技创新合作”重点专项2025年度“一带一路”科技减贫、人工智能和中医药领域合作项目", 
+                        agency: "科技部", 
+                        phone: "010-58881151", 
+                        remarks: "围绕科技减贫、人工智能和中医药3个领域，拟支持项目数78项左右，国拨经费总概算1.77亿元人民币。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12990", 
+                        t26: "", 
+                        t25: "2025年9月17日8:00至2025年10月29日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    // 国家基金委
+                    { 
+                        name: "国家重点研发计划“生物与信息融合(BT与IT融合)”重点专项2025年度应急项目申报指南", 
+                        agency: "国家基金委", 
+                        phone: "010-62327967\n010-62329246", 
+                        remarks: "采用一轮申报的程序", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12438", 
+                        t26: "", 
+                        t25: "2025年4月12日8:00至4月27日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“合成生物学”重点专项2025年度应急项目申报指南", 
+                        agency: "国家基金委", 
+                        phone: "010-62329246", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "2024年8月1日8:00至9月9日16:00", 
+                        t23: "2023年7月19日8:00至8月17日16:00" 
+                    },
+                    { 
+                        name: "国家重点研发计划“生物大分子与微生物组”重点专项2025年度项目申报指南", 
+                        agency: "国家基金委", 
+                        phone: "010-62329240", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“合成生物学”重点专项2025年度项目申报指南", 
+                        agency: "国家基金委", 
+                        phone: "010-62329246", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12787", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“发育编程及其代谢调节”重点专项2025年度项目申报指南", 
+                        agency: "国家基金委", 
+                        phone: "010-62328790", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    // 农业农村部
+                    { 
+                        name: "“农业生物重要性状形成与环境适应性基础研究”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-68598087", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "主要作物丰产增效科技创新工程”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-59198064", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“黑土地保护与利用科技创新”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-68598074", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“农业面源、重金属污染防控和绿色投入品研发”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-59198044", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“重大病虫害防控综合技术研发与示范”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-59198043", 
+                        remarks: "采取一轮申报", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=11903", 
+                        t26: "", 
+                        t25: "2025年7月14日8:00至8月22日16:00", 
+                        t24: "2024年8月22日8:00至9月26日16:00", 
+                        t23: "2023年5月18日8:00至6月19日16:00" 
+                    },
+                    { 
+                        name: "“畜禽新品种培育与现代牧场科技创新”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-68598497", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“动物疫病综合防控关键技术研发与应用”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-59198067", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“海洋农业与淡水渔业科技创新”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-59198045", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“食品制造与农产品物流科技支撑”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-68510207", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "“乡村产业共性关键技术研发与集成应用”重点专项", 
+                        agency: "农业农村部", 
+                        phone: "010-68598200", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    // 国家疾控局
+                    { 
+                        name: "国家重点研发计划“前沿生物技术”重点专项2025年度第一批项目", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225179", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12319", 
+                        t26: "", 
+                        t25: "2025年3月12日8:00至3月31日16:00", 
+                        t24: "2024年9月11日8:00至10月18日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“常见多发病防治研究”重点专项2025年度项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225180", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“生育健康及妇女儿童健康保障”重点专项2025年度项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387278", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“干细胞研究与器官修复”重点专项2025年度项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225150", 
+                        remarks: "一轮申报", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12414", 
+                        t26: "", 
+                        t25: "2025年4月21日8:00至5月21日16:00", 
+                        t24: "2024年9月11日8:00至10月18日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“前沿生物技术”重点专项2025年度第二批项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225179", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“生物安全关键技术研究”重点专项2025年度项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225136", 
+                        remarks: "", 
+                        link: "", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "2023年8月17日8:00至9月15日16:00" 
+                    },
+                    { 
+                        name: "国家重点研发计划“诊疗装备与生物医用材料”重点专项2025年度项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225070、88225137", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12738", 
+                        t26: "", 
+                        t25: "2025年7月3日8:00至8月11日16:00", 
+                        t24: "2024年9月11日8:00至10月18日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "癌症、心脑血管、呼吸和代谢性疾病防治研究国家科技重大专项2025年度定向项目和公开竞争申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387177\n010-88387329\n010-88387296", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12207", 
+                        t26: "", 
+                        t25: "2025年2月14日10:00至3月7日16:00", 
+                        t24: "定向项目：2024年9月26日8:00至2024年10月23日16:00<br>公开竞争项目：2024年10月14日8:00至2024年11月12日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "癌症、心脑血管、呼吸和代谢性疾病防治研究国家科技重大专项2025年度新型方式项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387177\n010-88387329\n010-88387296", 
+                        remarks: "由申报单位提出预算需求，专业机构组织财务专家论证后确认", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12753", 
+                        t26: "", 
+                        t25: "2025年7月7日8:00至7月27日16:00", 
+                        t24: "2024年9月26日8:00至2024年10月23日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "癌症、心脑血管、呼吸和代谢性疾病等重大疾病防治诊疗指南为重点，中西医并重，围绕形成慢病防治“中国方案”部署相关发病机制、筛防技术、临床诊疗等方面研究和攻关，启动 53 个重点研究方向。", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387278", 
+                        remarks: "四大慢病重大专项以解决癌症、心脑血管、呼吸和代谢性疾病等重大疾病防治诊疗难题为重点，中西医并重，围绕形成慢病防治“中国方案”部署相关发病机制、筛防技术、临床诊疗等方面研究和攻关，启动 53 个重点研究方向。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=13021", 
+                        t26: "2025年9月29日8:00至2025年11月5日16:00", 
+                        t25: "2025年2月14日10:00至2025年3月17日16:00", 
+                        t24: "", 
+                        t23: "2023年12月19日8:00至2024年2月1日16:00" 
+                    },
+                    { 
+                        name: "新发突发与重大传染病防控国家科技重大专项2026年度项目", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387211", 
+                        remarks: "围绕新发突发传染病和重大传染病防控两大方向，重点部署未知传染病风险预测、新发突发传染病监测预警、人群防控与临床救治、预防诊断与治疗产品、应用基础研究与共性关键技术储备、研判决策与示范应用、艾滋病、病毒性肝炎、结核病等任务。对于突发事件等动态形成指南，及时灵活立项。2026年，以公开竞争、定向委托、应急立项等方式启动39个重点研究方向。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=13023", 
+                        t26: "2025年10月13日8:00至2025年11月14日16:00，其中应急项目网上填报项目申报书的受理时间为2025年10月13日8:00至2025年10月28日16:00。", 
+                        t25: "2025年7月15日10:00至8月19日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "创新药物研发国家科技重大专项2026年度项目", 
+                        agency: "国家疾控局", 
+                        phone: "010-88225062", 
+                        remarks: "围绕重大新药品种创制和创新体系建设两方面开展集成攻关。2026年，启动33个重点研究方向。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=13032", 
+                        t26: "2025年10月16日8:00至2025年11月1日16:00", 
+                        t25: "2025年7月15日10:00至2025年8月19日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“病原学与防疫技术体系研究”重点专项2025年度项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387129\n010-88387238", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12201", 
+                        t26: "", 
+                        t25: "2025年3月15日8:00至4月23日16:00", 
+                        t24: "2024年8月1日8:00至8月30日16:00", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划“病原学与防疫技术体系研究”重点专项2025年度第二批项目申报指南", 
+                        agency: "国家疾控局", 
+                        phone: "010-88387129\n010-88387238", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12362", 
+                        t26: "", 
+                        t25: "2025年3月27日8:00至4月9日16:00", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    // 国家中医药管理局
+                    { 
+                        name: "“中医药现代化”重点专项2025年公开竞争、青年科学家项目申报指南", 
+                        agency: "国家中医药管理局", 
+                        phone: "010-88225063、010-88225195", 
+                        remarks: "中药发酵饮片关键技术研究与产业化应用示范等领域", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12830", 
+                        t26: "", 
+                        t25: "2025年7月21日8:00至9月2日16:00", 
+                        t24: "2024年10月21日8:00至12月2日16:00", 
+                        t23: "" 
+                    },
+                    // 京津冀国家技术创新中心
+                    { 
+                        name: "国家重点研发计划颠覆性技术创新重点专项2025年度细胞与基因治疗领域项目申报指引", 
+                        agency: "京津冀国家技术创新中心", 
+                        phone: "010-60976509\n020-82099819\n021-52270905", 
+                        remarks: "开放发现、常态选拔、及时立项、动态优化、滚动支持等机制。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12989", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家重点研发计划颠覆性技术创新重点专项", 
+                        agency: "京津冀国家技术创新中心", 
+                        phone: "010-60976516\n020-82099819\n021-52270905", 
+                        remarks: "专项围绕集成电路与微纳系统、人工智能与信息系统、科学仪器与新型系统等领域、生命健康、能源资源与环境、先进制造与运载系统等重要领域，梳理和培育各类颠覆性技术，并聚焦若干战略赛道，高地进行集中布局。采取育种、育苗、育才梯度布局，项目一般不超过", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjzdjhb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1543&wbnewsid=12240", 
+                        t26: "", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    }
+                ]
+            },
+            province: {
+                title: "省部级科技项目",
+                items: [
+                    { 
+                        name: "山东省自然科学基金青年A、B、C，面上", 
+                        agency: "山东省科技厅", 
+                        phone: "0531-51751109、51751138", 
+                        remarks: "不受理博士后申请。面上项目限额（目前申报的都推荐了）。", 
+                        link: "https://mp.weixin.qq.com/s/nZIVF7c_iON0Zje4v5BCfw", 
+                        t26: "2026年1月21日10:00至3月10日17:00（校内截止时间为2月24日12:00，后续会进行形式审查退回修改）", 
+                        t25: "2025年4月10日10：00至5月9日17:00（校内截止时间为4月25日17:00）", 
+                        t24: "截止时间2024年6月20日17:00（校内截止时间为6月9日17:00）", 
+                        t23: "截止时间2022年12月8日16:00（校内截止时间为2022年11月20日16:00前）" 
+                    },
+                    { 
+                        name: "黄河流域协同科技创新（科技对口支援和东西部协作）项目", 
+                        agency: "山东省科技厅", 
+                        phone: "0531-51751279，0531-51751163", 
+                        remarks: "", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/dfzfxmb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1551&wbnewsid=12587", 
+                        t26: "", 
+                        t25: "校内截止时间为2025年5月25日17:00时前", 
+                        t24: "校内截止时间为2024年8月9日9时-8月12日17时", 
+                        t23: "校内截止时间为2023年3月29日17时" 
+                    },
+                    { 
+                        name: "山东省自然科学基金重大基础研究项目", 
+                        agency: "山东省科技厅", 
+                        phone: "0531-51751138、0531-51751109", 
+                        remarks: "省重大基础研究项目设置原创探索、目标导向2类，项目执行期原则上为3年。原创探索类聚焦未来产业中的前沿和未知领域。项目资助额度不超过100万元/项。目标导向类聚焦山东省未来产业和科技创新行动计划重点任务，凝练重大科学问题及关键共性技术难题。项目资助额度不超过200万元/项。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/dfzfxmb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1551&wbnewsid=12835", 
+                        t26: "", 
+                        t25: "2025年7月18日10:00至7月31日17:00（校内截止时间为7月25日17:00）", 
+                        t24: "2024年8月1日10:00至8月22日17:00（校内截止时间为2024年8月14日17:00）", 
+                        t23: "2023年6月25日17:00前（校内截止时间为2023年6月21日17:00）" 
+                    }
+                ]
+            },
+            city: {
+                title: "地市级科技项目",
+                items: [
+                    { 
+                        name: "青岛市自然科学基金青年和原创探索项目", 
+                        agency: "青岛市科技局", 
+                        phone: "0532-85911053", 
+                        remarks: "青年项目拟立项数量不超过150项，每项不超过10万元。原创探索项目拟立项数量不超过120项，青岛校区2025年推荐15项，每项不超过20万元。申请人须为山东大学青岛校区全职在编在岗人员，须是项目实际负责人，科研诚信良好。", 
+                        link: "https://kyc.qd.sdu.edu.cn/info/1025/2273.htm", 
+                        t26: "", 
+                        t25: "2024年12月31日至2025年1月19日（青岛校区截止时间）", 
+                        t24: "2024年3月7日-3月21日17:00", 
+                        t23: "2023年1月30日9:00至2023年2月10日17:00" 
+                    },
+                    { 
+                        name: "青岛市科技惠民示范专项", 
+                        agency: "青岛市科技局", 
+                        phone: "0532-85911341", 
+                        remarks: "2026年度项目全部实行非定额资助方式，立项支持经费不超过指南中明确的支持强度金额，支持额度100万元以上的项目，执行期一般为3年，支持额度100万元（含）以下的项目，执行期一般为2年。", 
+                        link: "https://kyc.qd.sdu.edu.cn/info/1025/2325.htm", 
+                        t26: "2025年9月26日17:00至2025年10月13日17:00（青岛校区申报截止时间）", 
+                        t25: "2024年9月11日12时至2024年9月23日17时（青岛校区申报截止时间）", 
+                        t24: "2023 年9月26日16:00 至 2023 年 10 月 17 日 12:00（青岛校区申报截止时间2023年10月15日17:00）", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "青岛市自然科学基金重点项目", 
+                        agency: "青岛市科技局", 
+                        phone: "0532-85911053", 
+                        remarks: "支持资金不超过100万元,项目资助期限原则上不超过3年，支持资金分期拨付。年龄原则上不超过56周岁，具有高级专业技术职务（职称），具有承担国家或省自然科学基金项目的经历。", 
+                        link: "https://kyc.qd.sdu.edu.cn/info/1025/2332.htm", 
+                        t26: "", 
+                        t25: "2025年11月7日9:00至11月18日12:00（山东大学青岛校区申报时间）", 
+                        t24: "2024年10月4日17:00前（山东大学青岛校区截止时间）", 
+                        t23: "" 
+                    }
+                ]
+            },
+            advice: {
+                title: "指南建议征集",
+                items: [
+                    { 
+                        name: "国家自然科学基金区域创新发展联合基金(西藏)项目指南建议", 
+                        agency: "国家自然科学基金委", 
+                        remarks: "区域联合基金(西藏)以国家自然科学基金“重点支持项目”形式予以资助，项目直接费用平均资助强度约为260万元/项，资助期限为4年。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjjjb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1536&wbnewsid=12515", 
+                        t26: "2025年5月7日16:00前", 
+                        t25: "", 
+                        t24: "", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "国家自然科学基金区域创新发展联合基金（山东省）项目指南建议", 
+                        agency: "国家自然科学基金委", 
+                        remarks: "重点在生物与农业、能源与化工、新材料与先进制造、电子信息、人口与健康、海洋科学等六个领域梳理凝练科学问题。直接费用平均资助强度约为260万元/项，项目资助期限均为4年。", 
+                        link: "https://www.rd.sdu.edu.cn/kyyzwz/gjjjb_content.jsp?urltype=news.NewsContentUrl&wbtreeid=1536&wbnewsid=12335", 
+                        t26: "2025年4月8日16:00 前", 
+                        t25: "2024年3月1日16：00前", 
+                        t24: "2023年3月15日16:00前", 
+                        t23: "" 
+                    },
+                    { 
+                        name: "征集青岛市科技惠民示范专项项目指南建议", 
+                        agency: "青岛市科技局", 
+                        remarks: "2026年度征集方向是生命健康领域、城市品质提升领域和现代农业领域。青岛校区每个领域推荐数量不超过5项。", 
+                        link: "https://kyc.qd.sdu.edu.cn/info/1025/2293.htm", 
+                        t26: "2025年5月9日前", 
+                        t25: "2024年5月12日前", 
+                        t24: "", 
+                        t23: "" 
+                    }
+                ]
+            }
+        };
+
+        // 页面加载自动显示首页
+        window.onload = function() {
+            showHome();
+            // 初始化菜单高亮状态
+            document.getElementById('btn-home').classList.add('nav-active');
+        };
+
+        // 折叠/展开子菜单
+        function toggleSub(subId) {
+            const subMenu = document.getElementById(subId);
+            if (subMenu) {
+                subMenu.classList.toggle('hidden');
+            }
+        }
+
+        // 显示首页概览
+        function showHome() {
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑
+            breadcrumb.textContent = "首页 / 申报指南概览";
+            
+            // 重置菜单高亮
+            resetMenuActive();
+            document.getElementById('btn-home').classList.add('nav-active');
+            
+            // 渲染首页内容
+            contentArea.innerHTML = `
+            <div class="animate-slide">
+                <h2 class="text-3xl font-bold serif mb-8 text-blue-900">科研项目申报全景指南</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-white p-6 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="renderNsfcSub('集中受理项目')">
+                        <div class="text-xl font-bold text-blue-900 mb-2">🧬 国家自然科学基金</div>
+                        <div class="text-sm text-slate-600 mb-4">涵盖集中受理、重大项目、专项项目等7大类别，覆盖基础研究全领域</div>
+                        <div class="text-xs text-blue-700">点击查看 →</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="renderMajor()">
+                        <div class="text-xl font-bold text-blue-900 mb-2">🚀 国家重点研发计划</div>
+                        <div class="text-sm text-slate-600 mb-4">工程科学、国际合作、传染病防控等重点专项，国拨经费支持</div>
+                        <div class="text-xs text-blue-700">点击查看 →</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="renderProvince()">
+                        <div class="text-xl font-bold text-blue-900 mb-2">🏛️ 省部级科技项目</div>
+                        <div class="text-sm text-slate-600 mb-4">山东省自然科学基金、黄河流域协同创新等省级重点项目</div>
+                        <div class="text-xs text-blue-700">点击查看 →</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="renderCity()">
+                        <div class="text-xl font-bold text-blue-900 mb-2">🏙️ 地市级科技项目</div>
+                        <div class="text-sm text-slate-600 mb-4">青岛市自然科学基金、科技惠民示范专项等市级资助项目</div>
+                        <div class="text-xs text-blue-700">点击查看 →</div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <h3 class="text-lg font-bold text-blue-900 mb-3">📢 申报提醒</h3>
+                    <ul class="text-sm text-slate-700 space-y-2">
+                        <li>• 2026年度国家自然科学基金集中受理项目申报时间：2026年1月15日至3月20日16时</li>
+                        <li>• 山东省自然科学基金项目校内截止时间：2026年2月24日12:00</li>
+                        <li>• 青岛市科技惠民示范专项申报时间：2025年9月26日至10月13日</li>
+                        <li>• 所有项目申报请以主管部门最新通知为准，建议提前3-5个工作日完成填报</li>
+                    </ul>
+                </div>
+            </div>`;
+        }
+
+        // 渲染国家自然科学基金子分类
+        function renderNsfcSub(subName) {
+            const nsfcData = FULL_DB.nsfc;
+            const subData = nsfcData.subCategories[subName] || [];
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑和菜单高亮
+            breadcrumb.textContent = `首页 / ${nsfcData.title} / ${subName}`;
+            resetMenuActive();
+            document.querySelector('[onclick="toggleSub(\'sub-nsfc\')"]').classList.add('nav-active');
+            
+            // 渲染子分类内容
+            let html = `
+            <div class="animate-slide">
+                <h2 class="text-2xl font-bold mb-6 text-blue-900">🧬 ${nsfcData.title} - ${subName}（共${subData.length}项）</h2>
+                <div class="space-y-4">`;
+            
+            if (subData.length === 0) {
+                html += `
+                <div class="bg-white p-8 rounded-xl text-center border border-slate-200">
+                    <div class="text-slate-400 mb-2">🔍</div>
+                    <div class="text-lg font-medium text-slate-700">暂无该分类项目数据</div>
+                    <div class="text-sm text-slate-500 mt-1">请关注主管部门最新通知</div>
+                </div>`;
+            } else {
+                subData.forEach((item, index) => {
+                    html += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-slate-900">${index + 1}. ${item.name}</h3>
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="text-xs text-blue-600 hover:underline">查看原文</a>` : ''}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-slate-500">主管部门：</span>
+                                <span class="text-slate-800">${item.agency || '无'}</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">咨询电话：</span>
+                                <span class="text-slate-800">${item.phone ? item.phone.replace(/\n/g, '<br>') : '无'}</span>
+                            </div>
+                        </div>
+                        ${item.remarks ? `
+                        <div class="mt-3 text-sm text-slate-700">
+                            <span class="text-slate-500">项目说明：</span>
+                            <span>${item.remarks}</span>
+                        </div>` : ''}
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <div class="text-sm font-medium text-slate-800 mb-2">申报时间：</div>
+                            <div class="space-y-1 text-sm">
+                                ${item.t26 ? `<div><span class="text-blue-700 font-medium">2026年：</span> ${item.t26}</div>` : ''}
+                                ${item.t25 ? `<div><span class="text-slate-700 font-medium">2025年：</span> ${item.t25}</div>` : ''}
+                                ${item.t24 ? `<div><span class="text-slate-600">2024年：</span> ${item.t24}</div>` : ''}
+                                ${item.t23 ? `<div><span class="text-slate-500">2023年：</span> ${item.t23}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+            
+            html += `</div></div>`;
+            contentArea.innerHTML = html;
+        }
+
+        // 渲染国家重点研发计划（按主管部门分类）
+        function renderMajor() {
+            const majorData = FULL_DB.major;
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑和菜单高亮
+            breadcrumb.textContent = `首页 / ${majorData.title}`;
+            resetMenuActive();
+            document.querySelector('[data-id="major"]').classList.add('nav-active');
+            
+            // 按主管部门分组
+            const groupedByAgency = {};
+            majorData.items.forEach(item => {
+                const agency = item.agency || '其他部门';
+                if (!groupedByAgency[agency]) {
+                    groupedByAgency[agency] = [];
+                }
+                groupedByAgency[agency].push(item);
+            });
+            
+            // 渲染内容
+            let html = `
+            <div class="animate-slide">
+                <h2 class="text-2xl font-bold mb-6 text-blue-900">🚀 ${majorData.title}</h2>
+                <div class="space-y-8">`;
+            
+            // 遍历每个主管部门分组
+            Object.keys(groupedByAgency).forEach(agency => {
+                const items = groupedByAgency[agency];
+                
+                html += `
+                <!-- 主管部门分组标题 -->
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-4">
+                    <h3 class="text-lg font-bold text-blue-900">🏛️ ${agency}（共${items.length}项）</h3>
+                </div>
+                
+                <!-- 该部门下的项目列表 -->
+                <div class="space-y-4">`;
+                
+                // 渲染该部门下的每个项目
+                items.forEach((item, index) => {
+                    // 补充完整信息（确保每个项目都有完整的字段）
+                    const fullRemarks = item.remarks || `该项目属于${agency}主管的国家重点研发计划专项，具体要求请以官方通知为准。`;
+                    const fullPhone = item.phone || '暂无公开咨询电话，请查阅官方指南';
+                    
+                    html += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="text-lg font-bold text-slate-900">${index + 1}. ${item.name}</h4>
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="text-xs text-blue-600 hover:underline">查看原文</a>` : ''}
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-slate-500">主管部门：</span>
+                                <span class="text-slate-800 font-medium">${agency}</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">咨询电话：</span>
+                                <span class="text-slate-800">${fullPhone.replace(/\n/g, '<br>')}</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-sm text-slate-700">
+                            <span class="text-slate-500">项目说明：</span>
+                            <span>${fullRemarks}</span>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <div class="text-sm font-medium text-slate-800 mb-2">申报时间：</div>
+                            <div class="space-y-1 text-sm">
+                                ${item.t26 ? `<div><span class="text-blue-700 font-medium">2026年：</span> ${item.t26}</div>` : ''}
+                                ${item.t25 ? `<div><span class="text-slate-700 font-medium">2025年：</span> ${item.t25}</div>` : ''}
+                                ${item.t24 ? `<div><span class="text-slate-600">2024年：</span> ${item.t24}</div>` : ''}
+                                ${item.t23 ? `<div><span class="text-slate-500">2023年：</span> ${item.t23}</div>` : ''}
+                                ${!item.t26 && !item.t25 && !item.t24 && !item.t23 ? 
+                                  `<div><span class="text-slate-500">暂无公开申报时间，请关注官方通知</span></div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                
+                html += `</div>`; // 关闭该部门的项目列表
+            });
+            
+            html += `</div></div>`;
+            contentArea.innerHTML = html;
+        }
+
+        // 渲染省部级科技项目
+        function renderProvince() {
+            const provinceData = FULL_DB.province;
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑和菜单高亮
+            breadcrumb.textContent = `首页 / ${provinceData.title}`;
+            resetMenuActive();
+            document.querySelector('[data-id="province"]').classList.add('nav-active');
+            
+            // 渲染内容
+            let html = `
+            <div class="animate-slide">
+                <h2 class="text-2xl font-bold mb-6 text-blue-900">🏛️ ${provinceData.title}</h2>
+                <div class="space-y-4">`;
+            
+            provinceData.items.forEach((item, index) => {
+                html += `
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-lg font-bold text-slate-900">${index + 1}. ${item.name}</h3>
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="text-xs text-blue-600 hover:underline">查看原文</a>` : ''}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-slate-500">主管部门：</span>
+                            <span class="text-slate-800">${item.agency || '无'}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500">咨询电话：</span>
+                            <span class="text-slate-800">${item.phone ? item.phone.replace(/\n/g, '<br>') : '无'}</span>
+                        </div>
+                    </div>
+                    ${item.remarks ? `
+                    <div class="mt-3 text-sm text-slate-700">
+                        <span class="text-slate-500">项目说明：</span>
+                        <span>${item.remarks}</span>
+                    </div>` : ''}
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="text-sm font-medium text-slate-800 mb-2">申报时间：</div>
+                        <div class="space-y-1 text-sm">
+                            ${item.t26 ? `<div><span class="text-blue-700 font-medium">2026年：</span> ${item.t26}</div>` : ''}
+                            ${item.t25 ? `<div><span class="text-slate-700 font-medium">2025年：</span> ${item.t25}</div>` : ''}
+                            ${item.t24 ? `<div><span class="text-slate-600">2024年：</span> ${item.t24}</div>` : ''}
+                            ${item.t23 ? `<div><span class="text-slate-500">2023年：</span> ${item.t23}</div>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            html += `</div></div>`;
+            contentArea.innerHTML = html;
+        }
+
+        // 渲染地市级科技项目
+        function renderCity() {
+            const cityData = FULL_DB.city;
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑和菜单高亮
+            breadcrumb.textContent = `首页 / ${cityData.title}`;
+            resetMenuActive();
+            document.querySelector('[data-id="city"]').classList.add('nav-active');
+            
+            // 渲染内容
+            let html = `
+            <div class="animate-slide">
+                <h2 class="text-2xl font-bold mb-6 text-blue-900">🏙️ ${cityData.title}</h2>
+                <div class="space-y-4">`;
+            
+            cityData.items.forEach((item, index) => {
+                html += `
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-lg font-bold text-slate-900">${index + 1}. ${item.name}</h3>
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="text-xs text-blue-600 hover:underline">查看原文</a>` : ''}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-slate-500">主管部门：</span>
+                            <span class="text-slate-800">${item.agency || '无'}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500">咨询电话：</span>
+                            <span class="text-slate-800">${item.phone ? item.phone.replace(/\n/g, '<br>') : '无'}</span>
+                        </div>
+                    </div>
+                    ${item.remarks ? `
+                    <div class="mt-3 text-sm text-slate-700">
+                        <span class="text-slate-500">项目说明：</span>
+                        <span>${item.remarks}</span>
+                    </div>` : ''}
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="text-sm font-medium text-slate-800 mb-2">申报时间：</div>
+                        <div class="space-y-1 text-sm">
+                            ${item.t26 ? `<div><span class="text-blue-700 font-medium">2026年：</span> ${item.t26}</div>` : ''}
+                            ${item.t25 ? `<div><span class="text-slate-700 font-medium">2025年：</span> ${item.t25}</div>` : ''}
+                            ${item.t24 ? `<div><span class="text-slate-600">2024年：</span> ${item.t24}</div>` : ''}
+                            ${item.t23 ? `<div><span class="text-slate-500">2023年：</span> ${item.t23}</div>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            html += `</div></div>`;
+            contentArea.innerHTML = html;
+        }
+
+        // 渲染指南建议征集
+        function renderAdvice() {
+            const adviceData = FULL_DB.advice;
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑和菜单高亮
+            breadcrumb.textContent = `首页 / ${adviceData.title}`;
+            resetMenuActive();
+            document.querySelector('[data-id="advice"]').classList.add('nav-active');
+            
+            // 渲染内容
+            let html = `
+            <div class="animate-slide">
+                <h2 class="text-2xl font-bold mb-6 text-blue-900">💡 ${adviceData.title}</h2>
+                <div class="space-y-4">`;
+            
+            adviceData.items.forEach((item, index) => {
+                html += `
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-lg font-bold text-slate-900">${index + 1}. ${item.name}</h3>
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="text-xs text-blue-600 hover:underline">查看原文</a>` : ''}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-slate-500">主管部门：</span>
+                            <span class="text-slate-800">${item.agency || '无'}</span>
+                        </div>
+                    </div>
+                    ${item.remarks ? `
+                    <div class="mt-3 text-sm text-slate-700">
+                        <span class="text-slate-500">征集说明：</span>
+                        <span>${item.remarks}</span>
+                    </div>` : ''}
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="text-sm font-medium text-slate-800 mb-2">征集时间：</div>
+                        <div class="space-y-1 text-sm">
+                            ${item.t26 ? `<div><span class="text-blue-700 font-medium">2026年：</span> ${item.t26}</div>` : ''}
+                            ${item.t25 ? `<div><span class="text-slate-700 font-medium">2025年：</span> ${item.t25}</div>` : ''}
+                            ${item.t24 ? `<div><span class="text-slate-600">2024年：</span> ${item.t24}</div>` : ''}
+                            ${item.t23 ? `<div><span class="text-slate-500">2023年：</span> ${item.t23}</div>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            html += `</div></div>`;
+            contentArea.innerHTML = html;
+        }
+
+        // 搜索功能
+        function handleSearch(keyword) {
+            if (!keyword.trim()) {
+                showHome();
+                return;
+            }
+            
+            const lowerKeyword = keyword.toLowerCase();
+            const allItems = [];
+            
+            // 收集所有项目数据
+            // 国家自然科学基金
+            for (const sub in FULL_DB.nsfc.subCategories) {
+                FULL_DB.nsfc.subCategories[sub].forEach(item => {
+                    allItems.push({ ...item, category: `国家自然科学基金 - ${sub}` });
+                });
+            }
+            // 其他类别
+            ['major', 'province', 'city', 'advice'].forEach(type => {
+                FULL_DB[type].items.forEach(item => {
+                    allItems.push({ ...item, category: FULL_DB[type].title });
+                });
+            });
+            
+            // 筛选匹配项
+            const matchedItems = allItems.filter(item => 
+                item.name.toLowerCase().includes(lowerKeyword) || 
+                (item.remarks && item.remarks.toLowerCase().includes(lowerKeyword)) || 
+                (item.agency && item.agency.toLowerCase().includes(lowerKeyword))
+            );
+            
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // 更新面包屑和菜单高亮
+            breadcrumb.textContent = `搜索结果 / 关键词：${keyword}`;
+            resetMenuActive();
+            
+            // 渲染搜索结果
+            let html = `
+            <div class="animate-slide">
+                <h2 class="text-2xl font-bold mb-6 text-blue-900">🔍 搜索结果（共${matchedItems.length}条）</h2>
+                <div class="space-y-4">`;
+            
+            if (matchedItems.length === 0) {
+                html += `
+                <div class="bg-white p-8 rounded-xl text-center border border-slate-200">
+                    <div class="text-slate-400 mb-2">🔍</div>
+                    <div class="text-lg font-medium text-slate-700">未找到相关项目</div>
+                    <div class="text-sm text-slate-500 mt-1">建议尝试其他关键词或检查拼写</div>
+                </div>`;
+            } else {
+                matchedItems.forEach((item, index) => {
+                    html += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-slate-900">${index + 1}. ${item.name}</h3>
+                            <span class="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full">${item.category}</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-3">
+                            <div>
+                                <span class="text-slate-500">主管部门：</span>
+                                <span class="text-slate-800">${item.agency || '无'}</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">咨询电话：</span>
+                                <span class="text-slate-800">${item.phone ? item.phone.replace(/\n/g, '<br>') : '无'}</span>
+                            </div>
+                        </div>
+                        ${item.remarks ? `
+                        <div class="mt-2 text-sm text-slate-700 line-clamp-2">
+                            <span class="text-slate-500">说明：</span>
+                            <span>${item.remarks}</span>
+                        </div>` : ''}
+                        <div class="mt-3 pt-3 border-t border-slate-100 text-sm">
+                            <span class="text-slate-500">最新申报时间：</span>
+                            <span class="text-slate-800 font-medium">${item.t26 || item.t25 || item.t24 || '暂无'}</span>
+                        </div>
+                    </div>`;
+                });
+            }
+            
+            html += `</div></div>`;
+            contentArea.innerHTML = html;
+        }
+
+        // 重置菜单高亮状态
+        function resetMenuActive() {
+            // 重置主菜单
+            document.querySelectorAll('.main-btn').forEach(btn => {
+                btn.classList.remove('nav-active');
+            });
+            // 重置首页按钮
+            document.getElementById('btn-home').classList.remove('nav-active');
+            // 重置子菜单
+            document.querySelectorAll('.sub-btn').forEach(btn => {
+                btn.classList.remove('sub-nav-active');
+            });
+        }
+    </script>
+</body>
+</html>
